@@ -1,0 +1,10 @@
+name: currency-converter-ai-mcp
+description: "MEOK AI Labs — Currency Converter tools for AI agents and LLMs"
+vendor: MEOK AI Labs
+homepage: https://meok.ai
+repository: https://github.com/CSOAI-ORG/currency-converter-ai-mcp
+license: MIT
+categories: [Finance, Utilities]
+tags: [currency-conversion, forex, exchange-rates, international-finance]
+runtime: python
+entrypoint: server.py
