@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "currency-converter-ai-mcp"
+version = "0.1.0"
+description = "Convert currencies using built-in exchange rates and compute cross-rate conversions with historical trend indicators."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+    "pydantic>=2.0",
+]
+
+[project.scripts]
+currency_converter_ai_mcp = "currency_converter_ai_mcp.server:main"
