@@ -1,20 +1,6 @@
 {
   "name": "currency-converter-ai-mcp",
-  "description": "MEOK AI Labs \u2014 Currency Converter tools for AI agents and LLMs",
-  "vendor": "MEOK AI Labs",
-  "homepage": "https://meok.ai",
-  "repository": "https://github.com/CSOAI-ORG/currency-converter-ai-mcp",
-  "runtime": "python",
-  "entrypoint": "server.py",
-  "tools": [
-    "convert_currency"
-  ],
-  "categories": [
-    "Finance",
-    "Utilities"
-  ],
-  "pricing": {
-    "free": "50 calls/day",
-    "pro": "$9/mo"
-  }
+  "description": "Convert currencies using built-in exchange rates and compute cross-rate conversions with historical trend indicators.",
+  "version": "1.0.0",
+  "tools": []
 }
