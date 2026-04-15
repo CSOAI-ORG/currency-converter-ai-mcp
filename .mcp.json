@@ -1,6 +1,6 @@
 {
   "name": "currency-converter-ai-mcp",
-  "description": "> **By [MEOK AI Labs](https://meok.ai)** \u2014 MEOK AI Labs MCP Server",
+  "description": "> **By [MEOK AI Labs](https://meok.ai)** \u2014 Comprehensive currency conversion with rates and analytics.",
   "version": "1.0.0",
   "tools": [
     {
@@ -8,8 +8,22 @@
       "description": "Convert amount between currencies",
       "parameters": {
         "type": "object",
-        "properties": {},
-        "required": []
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "from_currency": {
+            "type": "string"
+          },
+          "to_currency": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "from_currency",
+          "to_currency"
+        ]
       }
     },
     {
@@ -17,8 +31,20 @@
       "description": "Convert amount to multiple currencies",
       "parameters": {
         "type": "object",
-        "properties": {},
-        "required": []
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "from_currency": {
+            "type": "string"
+          },
+          "to_currencies": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "amount"
+        ]
       }
     },
     {
@@ -26,7 +52,14 @@
       "description": "Get current exchange rate",
       "parameters": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "from_currency": {
+            "type": "string"
+          },
+          "to_currency": {
+            "type": "string"
+          }
+        },
         "required": []
       }
     },
@@ -35,7 +68,11 @@
       "description": "Get all exchange rates from base currency",
       "parameters": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "base": {
+            "type": "string"
+          }
+        },
         "required": []
       }
     },
@@ -44,7 +81,17 @@
       "description": "Get historical exchange rate",
       "parameters": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "from_currency": {
+            "type": "string"
+          },
+          "to_currency": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
         "required": []
       }
     },
@@ -53,7 +100,17 @@
       "description": "Get rate trend over time",
       "parameters": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "from_currency": {
+            "type": "string"
+          },
+          "to_currency": {
+            "type": "string"
+          },
+          "days": {
+            "type": "integer"
+          }
+        },
         "required": []
       }
     },
@@ -62,7 +119,14 @@
       "description": "Add currency pair to favorites",
       "parameters": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "from_currency": {
+            "type": "string"
+          },
+          "to_currency": {
+            "type": "string"
+          }
+        },
         "required": []
       }
     },
@@ -80,7 +144,20 @@
       "description": "Set alert for rate target",
       "parameters": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "from_currency": {
+            "type": "string"
+          },
+          "to_currency": {
+            "type": "string"
+          },
+          "target_rate": {
+            "type": "number"
+          },
+          "direction": {
+            "type": "string"
+          }
+        },
         "required": []
       }
     },
@@ -107,7 +184,14 @@
       "description": "Get conversion history",
       "parameters": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "days": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
         "required": []
       }
     }

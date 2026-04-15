@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """MEOK AI Labs — currency-converter-ai-mcp MCP Server. Comprehensive currency conversion with rates and analytics."""
 
-import asyncio
 import json
 from datetime import datetime, timedelta, timezone
 from typing import Any
@@ -11,6 +10,7 @@ import sys, os
 
 sys.path.insert(0, os.path.expanduser("~/clawd/meok-labs-engine/shared"))
 from auth_middleware import check_access
+from mcp.server.fastmcp import FastMCP
 from collections import defaultdict
 
 FREE_DAILY_LIMIT = 15
@@ -20,14 +20,9 @@ def _rl(c="anon"):
     _usage[c] = [t for t in _usage[c] if (now-t).total_seconds() < 86400]
     if len(_usage[c]) >= FREE_DAILY_LIMIT: return json.dumps({"error": f"Limit {FREE_DAILY_LIMIT}/day"})
     _usage[c].append(now); return None
-from mcp.server.models import InitializationOptions
-from mcp.server import NotificationOptions, Server
-from mcp.server.stdio import stdio_server
-from mcp.types import Resource, Tool, TextContent
-import mcp.types as types
 
 _store = {"conversions": [], "favorites": [], "alerts": []}
-server = Server("currency-converter-ai")
+mcp = FastMCP("currency-converter-ai", instructions="Comprehensive currency conversion with rates and analytics.")
 
 
 def create_id():
@@ -63,17 +58,17 @@ RATES = {
 
 SYMBOLS = {
     "USD": "$",
-    "GBP": "£",
-    "EUR": "€",
-    "JPY": "¥",
+    "GBP": "\u00a3",
+    "EUR": "\u20ac",
+    "JPY": "\u00a5",
     "AUD": "A$",
     "CAD": "C$",
     "CHF": "Fr",
-    "CNY": "¥",
-    "INR": "₹",
+    "CNY": "\u00a5",
+    "INR": "\u20b9",
     "MXN": "$",
     "BRL": "R$",
-    "KRW": "₩",
+    "KRW": "\u20a9",
     "SGD": "S$",
     "HKD": "HK$",
     "NOK": "kr",
@@ -81,21 +76,21 @@ SYMBOLS = {
     "DKK": "kr",
     "NZD": "NZ$",
     "ZAR": "R",
-    "RUB": "₽",
-    "TRY": "₺",
-    "PLN": "zł",
-    "THB": "฿",
+    "RUB": "\u20bd",
+    "TRY": "\u20ba",
+    "PLN": "z\u0142",
+    "THB": "\u0e3f",
     "MYR": "RM",
 }
 
 
-def get_rate(currency):
+def get_rate_val(currency):
     return RATES.get(currency, 1.0)
 
 
 def convert(amount, from_curr, to_curr):
-    usd_amount = amount / get_rate(from_curr)
-    return usd_amount * get_rate(to_curr)
+    usd_amount = amount / get_rate_val(from_curr)
+    return usd_amount * get_rate_val(to_curr)
 
 
 def format_amount(amount, currency):
@@ -105,448 +100,288 @@ def format_amount(amount, currency):
     return f"{symbol}{amount:,.2f}"
 
 
-@server.list_resources()
-async def handle_list_resources():
-    return [
-        Resource(uri="fx://rates", name="Exchange Rates", mimeType="application/json"),
-        Resource(
-            uri="fx://conversions",
-            name="Conversion History",
-            mimeType="application/json",
-        ),
-        Resource(
-            uri="fx://favorites", name="Favorite Pairs", mimeType="application/json"
-        ),
-    ]
-
-
-@server.list_tools()
-async def handle_list_tools():
-    return [
-        Tool(
-            name="convert_currency",
-            description="Convert amount between currencies",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "amount": {"type": "number"},
-                    "from": {"type": "string"},
-                    "to": {"type": "string"},
-                    "api_key": {"type": "string"},
-                },
-                "required": ["amount", "from", "to"],
-            },
-        ),
-        Tool(
-            name="batch_convert",
-            description="Convert amount to multiple currencies",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "amount": {"type": "number"},
-                    "from": {"type": "string"},
-                    "to_currencies": {"type": "array"},
-                    "api_key": {"type": "string"},
-                },
-            },
-        ),
-        Tool(
-            name="get_rate",
-            description="Get current exchange rate",
-            inputSchema={
-                "type": "object",
-                "properties": {"from": {"type": "string"}, "to": {"type": "string"}},
-            },
-        ),
-        Tool(
-            name="get_all_rates",
-            description="Get all exchange rates from base currency",
-            inputSchema={"type": "object", "properties": {"base": {"type": "string"}}},
-        ),
-        Tool(
-            name="get_historical_rate",
-            description="Get historical exchange rate",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "from": {"type": "string"},
-                    "to": {"type": "string"},
-                    "date": {"type": "string"},
-                },
-            },
-        ),
-        Tool(
-            name="get_rate_trend",
-            description="Get rate trend over time",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "from": {"type": "string"},
-                    "to": {"type": "string"},
-                    "days": {"type": "number"},
-                },
-            },
-        ),
-        Tool(
-            name="add_favorite",
-            description="Add currency pair to favorites",
-            inputSchema={
-                "type": "object",
-                "properties": {"from": {"type": "string"}, "to": {"type": "string"}},
-            },
-        ),
-        Tool(
-            name="get_favorites",
-            description="Get favorite currency pairs",
-            inputSchema={"type": "object", "properties": {}},
-        ),
-        Tool(
-            name="set_rate_alert",
-            description="Set alert for rate target",
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "from": {"type": "string"},
-                    "to": {"type": "string"},
-                    "target_rate": {"type": "number"},
-                    "direction": {"type": "string", "enum": ["above", "below"]},
-                },
-            },
-        ),
-        Tool(
-            name="get_alerts",
-            description="Get active rate alerts",
-            inputSchema={"type": "object", "properties": {}},
-        ),
-        Tool(
-            name="get_supported_currencies",
-            description="Get list of supported currencies",
-            inputSchema={"type": "object", "properties": {}},
-        ),
-        Tool(
-            name="get_conversion_history",
-            description="Get conversion history",
-            inputSchema={
-                "type": "object",
-                "properties": {"days": {"type": "number"}, "limit": {"type": "number"}},
-            },
-        ),
-    ]
-
-
-@server.call_tool()
-async def handle_call_tool(name: str, arguments: Any = None) -> list[types.TextContent]:
-    args = arguments or {}
-    api_key = args.get("api_key", "")
+@mcp.tool()
+def convert_currency(amount: float, from_currency: str, to_currency: str, api_key: str = "") -> str:
+    """Convert amount between currencies"""
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
-                ),
-            )
-        ]
-    if err := _rl(): return [TextContent(type="text", text=err)]
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
 
-    if name == "convert_currency":
-        amount = args.get("amount", 0)
-        from_curr = args.get("from", "USD").upper()
-        to_curr = args.get("to", "USD").upper()
+    from_curr = from_currency.upper()
+    to_curr = to_currency.upper()
 
-        converted = convert(amount, from_curr, to_curr)
-        rate = get_rate(to_curr) / get_rate(from_curr)
+    converted = convert(amount, from_curr, to_curr)
+    rate = get_rate_val(to_curr) / get_rate_val(from_curr)
 
-        record = {
-            "id": create_id(),
+    record = {
+        "id": create_id(),
+        "amount": amount,
+        "from": from_curr,
+        "to": to_curr,
+        "result": converted,
+        "rate": rate,
+        "timestamp": datetime.now().isoformat(),
+    }
+    _store["conversions"].append(record)
+
+    return json.dumps(
+        {
             "amount": amount,
             "from": from_curr,
             "to": to_curr,
-            "result": converted,
-            "rate": rate,
-            "timestamp": datetime.now().isoformat(),
+            "converted": round(converted, 2),
+            "formatted": format_amount(converted, to_curr),
+            "rate": round(rate, 4),
+        },
+        indent=2,
+    )
+
+
+@mcp.tool()
+def batch_convert(amount: float, from_currency: str = "USD", to_currencies: list = None, api_key: str = "") -> str:
+    """Convert amount to multiple currencies"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
+
+    from_curr = from_currency.upper()
+    targets = to_currencies or ["EUR", "GBP", "JPY"]
+
+    results = {}
+    for to_curr in targets:
+        converted = convert(amount, from_curr, to_curr.upper())
+        results[to_curr.upper()] = {
+            "converted": round(converted, 2),
+            "formatted": format_amount(converted, to_curr.upper()),
         }
-        _store["conversions"].append(record)
 
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {
-                        "amount": amount,
-                        "from": from_curr,
-                        "to": to_curr,
-                        "converted": round(converted, 2),
-                        "formatted": format_amount(converted, to_curr),
-                        "rate": round(rate, 4),
-                    },
-                    indent=2,
-                ),
-            )
-        ]
+    return json.dumps({"amount": amount, "from": from_curr, "results": results}, indent=2)
 
-    elif name == "batch_convert":
-        amount = args.get("amount", 0)
-        from_curr = args.get("from", "USD").upper()
-        to_currencies = args.get("to_currencies", ["EUR", "GBP", "JPY"])
 
-        results = {}
-        for to_curr in to_currencies:
-            converted = convert(amount, from_curr, to_curr.upper())
-            results[to_curr.upper()] = {
-                "converted": round(converted, 2),
-                "formatted": format_amount(converted, to_curr.upper()),
-            }
+@mcp.tool()
+def get_rate(from_currency: str = "USD", to_currency: str = "USD", api_key: str = "") -> str:
+    """Get current exchange rate"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
 
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {"amount": amount, "from": from_curr, "results": results}, indent=2
-                ),
-            )
-        ]
+    from_curr = from_currency.upper()
+    to_curr = to_currency.upper()
+    rate = get_rate_val(to_curr) / get_rate_val(from_curr)
 
-    elif name == "get_rate":
-        from_curr = args.get("from", "USD").upper()
-        to_curr = args.get("to", "USD").upper()
-        rate = get_rate(to_curr) / get_rate(from_curr)
+    return json.dumps(
+        {"from": from_curr, "to": to_curr, "rate": round(rate, 4), "inverse": round(1 / rate, 4)},
+        indent=2,
+    )
 
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {
-                        "from": from_curr,
-                        "to": to_curr,
-                        "rate": round(rate, 4),
-                        "inverse": round(1 / rate, 4),
-                    },
-                    indent=2,
-                ),
-            )
-        ]
 
-    elif name == "get_all_rates":
-        base = args.get("base", "USD").upper()
-        base_rate = get_rate(base)
+@mcp.tool()
+def get_all_rates(base: str = "USD", api_key: str = "") -> str:
+    """Get all exchange rates from base currency"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
 
-        rates = {}
-        for currency, rate in RATES.items():
-            rates[currency] = round(rate / base_rate, 4)
+    base_upper = base.upper()
+    base_rate = get_rate_val(base_upper)
 
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {
-                        "base": base,
-                        "rates": rates,
-                        "timestamp": datetime.now().isoformat(),
-                    },
-                    indent=2,
-                ),
-            )
-        ]
+    rates = {}
+    for currency, rate in RATES.items():
+        rates[currency] = round(rate / base_rate, 4)
 
-    elif name == "get_historical_rate":
-        from_curr = args.get("from", "USD").upper()
-        to_curr = args.get("to", "USD").upper()
-        date_str = args.get("date", datetime.now().strftime("%Y-%m-%d"))
+    return json.dumps(
+        {"base": base_upper, "rates": rates, "timestamp": datetime.now().isoformat()},
+        indent=2,
+    )
 
-        date = datetime.strptime(date_str, "%Y-%m-%d")
-        days_ago = (datetime.now() - date).days
 
-        volatility = 0.02
-        current_rate = get_rate(to_curr) / get_rate(from_curr)
-        historical_rate = current_rate * (
-            1 + random.uniform(-volatility * days_ago / 30, volatility * days_ago / 30)
-        )
+@mcp.tool()
+def get_historical_rate(from_currency: str = "USD", to_currency: str = "USD", date: str = "", api_key: str = "") -> str:
+    """Get historical exchange rate"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
 
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {
-                        "from": from_curr,
-                        "to": to_curr,
-                        "date": date_str,
-                        "rate": round(historical_rate, 4),
-                        "note": "Estimated historical rate",
-                    },
-                    indent=2,
-                ),
-            )
-        ]
+    from_curr = from_currency.upper()
+    to_curr = to_currency.upper()
+    date_str = date or datetime.now().strftime("%Y-%m-%d")
 
-    elif name == "get_rate_trend":
-        from_curr = args.get("from", "USD").upper()
-        to_curr = args.get("to", "USD").upper()
-        days = args.get("days", 30)
+    date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+    days_ago = (datetime.now() - date_obj).days
 
-        current_rate = get_rate(to_curr) / get_rate(from_curr)
+    volatility = 0.02
+    current_rate = get_rate_val(to_curr) / get_rate_val(from_curr)
+    historical_rate = current_rate * (
+        1 + random.uniform(-volatility * days_ago / 30, volatility * days_ago / 30)
+    )
 
-        trend_data = []
-        for i in range(days, 0, -5):
-            variance = random.uniform(-0.05, 0.05)
-            rate = current_rate * (1 + variance)
-            trend_data.append({"days_ago": i, "rate": round(rate, 4)})
-
-        trend_data.append({"days_ago": 0, "rate": round(current_rate, 4)})
-
-        trend = "stable"
-        if trend_data[-1]["rate"] > trend_data[0]["rate"] * 1.02:
-            trend = "appreciating"
-        elif trend_data[-1]["rate"] < trend_data[0]["rate"] * 0.98:
-            trend = "depreciating"
-
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {
-                        "from": from_curr,
-                        "to": to_curr,
-                        "trend": trend,
-                        "data": trend_data,
-                    },
-                    indent=2,
-                ),
-            )
-        ]
-
-    elif name == "add_favorite":
-        from_curr = args.get("from", "USD").upper()
-        to_curr = args.get("to", "EUR").upper()
-
-        pair = f"{from_curr}/{to_curr}"
-        if pair not in _store["favorites"]:
-            _store["favorites"].append(pair)
-
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {"added": True, "pair": pair, "favorites": _store["favorites"]},
-                    indent=2,
-                ),
-            )
-        ]
-
-    elif name == "get_favorites":
-        results = []
-        for pair in _store["favorites"]:
-            from_curr, to_curr = pair.split("/")
-            rate = get_rate(to_curr) / get_rate(from_curr)
-            results.append({"pair": pair, "rate": round(rate, 4)})
-
-        return [
-            TextContent(type="text", text=json.dumps({"favorites": results}, indent=2))
-        ]
-
-    elif name == "set_rate_alert":
-        from_curr = args.get("from", "USD").upper()
-        to_curr = args.get("to", "EUR").upper()
-        target = args.get("target_rate", 0.9)
-        direction = args.get("direction", "below")
-
-        alert = {
-            "id": create_id(),
+    return json.dumps(
+        {
             "from": from_curr,
             "to": to_curr,
-            "target_rate": target,
+            "date": date_str,
+            "rate": round(historical_rate, 4),
+            "note": "Estimated historical rate",
+        },
+        indent=2,
+    )
+
+
+@mcp.tool()
+def get_rate_trend(from_currency: str = "USD", to_currency: str = "USD", days: int = 30, api_key: str = "") -> str:
+    """Get rate trend over time"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
+
+    from_curr = from_currency.upper()
+    to_curr = to_currency.upper()
+
+    current_rate = get_rate_val(to_curr) / get_rate_val(from_curr)
+
+    trend_data = []
+    for i in range(days, 0, -5):
+        variance = random.uniform(-0.05, 0.05)
+        rate = current_rate * (1 + variance)
+        trend_data.append({"days_ago": i, "rate": round(rate, 4)})
+
+    trend_data.append({"days_ago": 0, "rate": round(current_rate, 4)})
+
+    trend = "stable"
+    if trend_data[-1]["rate"] > trend_data[0]["rate"] * 1.02:
+        trend = "appreciating"
+    elif trend_data[-1]["rate"] < trend_data[0]["rate"] * 0.98:
+        trend = "depreciating"
+
+    return json.dumps(
+        {"from": from_curr, "to": to_curr, "trend": trend, "data": trend_data},
+        indent=2,
+    )
+
+
+@mcp.tool()
+def add_favorite(from_currency: str = "USD", to_currency: str = "EUR", api_key: str = "") -> str:
+    """Add currency pair to favorites"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
+
+    from_curr = from_currency.upper()
+    to_curr = to_currency.upper()
+
+    pair = f"{from_curr}/{to_curr}"
+    if pair not in _store["favorites"]:
+        _store["favorites"].append(pair)
+
+    return json.dumps(
+        {"added": True, "pair": pair, "favorites": _store["favorites"]}, indent=2
+    )
+
+
+@mcp.tool()
+def get_favorites(api_key: str = "") -> str:
+    """Get favorite currency pairs"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
+
+    results = []
+    for pair in _store["favorites"]:
+        from_curr, to_curr = pair.split("/")
+        rate = get_rate_val(to_curr) / get_rate_val(from_curr)
+        results.append({"pair": pair, "rate": round(rate, 4)})
+
+    return json.dumps({"favorites": results}, indent=2)
+
+
+@mcp.tool()
+def set_rate_alert(from_currency: str = "USD", to_currency: str = "EUR", target_rate: float = 0.9, direction: str = "below", api_key: str = "") -> str:
+    """Set alert for rate target"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
+
+    from_curr = from_currency.upper()
+    to_curr = to_currency.upper()
+
+    alert = {
+        "id": create_id(),
+        "from": from_curr,
+        "to": to_curr,
+        "target_rate": target_rate,
+        "direction": direction,
+        "created_at": datetime.now().isoformat(),
+        "triggered": False,
+    }
+    _store["alerts"].append(alert)
+
+    return json.dumps(
+        {
+            "alert_created": True,
+            "alert_id": alert["id"],
+            "pair": f"{from_curr}/{to_curr}",
+            "target": target_rate,
             "direction": direction,
-            "created_at": datetime.now().isoformat(),
-            "triggered": False,
-        }
-        _store["alerts"].append(alert)
-
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {
-                        "alert_created": True,
-                        "alert_id": alert["id"],
-                        "pair": f"{from_curr}/{to_curr}",
-                        "target": target,
-                        "direction": direction,
-                    },
-                    indent=2,
-                ),
-            )
-        ]
-
-    elif name == "get_alerts":
-        active = [a for a in _store["alerts"] if not a.get("triggered")]
-
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {"active_alerts": active, "count": len(active)}, indent=2
-                ),
-            )
-        ]
-
-    elif name == "get_supported_currencies":
-        currencies = []
-        for code, rate in RATES.items():
-            currencies.append(
-                {"code": code, "symbol": SYMBOLS.get(code, code), "rate_to_usd": rate}
-            )
-
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {"currencies": currencies, "count": len(currencies)}, indent=2
-                ),
-            )
-        ]
-
-    elif name == "get_conversion_history":
-        days = args.get("days", 30)
-        limit = args.get("limit", 50)
-
-        cutoff = datetime.now() - timedelta(days=days)
-        history = [
-            c
-            for c in _store["conversions"]
-            if datetime.fromisoformat(c["timestamp"]) >= cutoff
-        ][-limit:]
-
-        return [
-            TextContent(
-                type="text",
-                text=json.dumps(
-                    {"conversions": history, "count": len(history)}, indent=2
-                ),
-            )
-        ]
-
-    return [TextContent(type="text", text=json.dumps({"error": "Unknown tool"}))]
+        },
+        indent=2,
+    )
 
 
-async def main():
-    async with stdio_server(server._read_stream, server._write_stream) as (
-        read_stream,
-        write_stream,
-    ):
-        await server.run(
-            read_stream,
-            write_stream,
-            InitializationOptions(
-                server_name="currency-converter-ai",
-                server_version="0.1.0",
-                capabilities=server.get_capabilities(
-                    notification_options=NotificationOptions(),
-                    experimental_capabilities={},
-                ),
-            ),
+@mcp.tool()
+def get_alerts(api_key: str = "") -> str:
+    """Get active rate alerts"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
+
+    active = [a for a in _store["alerts"] if not a.get("triggered")]
+    return json.dumps({"active_alerts": active, "count": len(active)}, indent=2)
+
+
+@mcp.tool()
+def get_supported_currencies(api_key: str = "") -> str:
+    """Get list of supported currencies"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
+
+    currencies = []
+    for code, rate in RATES.items():
+        currencies.append(
+            {"code": code, "symbol": SYMBOLS.get(code, code), "rate_to_usd": rate}
         )
+
+    return json.dumps({"currencies": currencies, "count": len(currencies)}, indent=2)
+
+
+@mcp.tool()
+def get_conversion_history(days: int = 30, limit: int = 50, api_key: str = "") -> str:
+    """Get conversion history"""
+    allowed, msg, tier = check_access(api_key)
+    if not allowed:
+        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+    if err := _rl(): return err
+
+    cutoff = datetime.now() - timedelta(days=days)
+    history = [
+        c
+        for c in _store["conversions"]
+        if datetime.fromisoformat(c["timestamp"]) >= cutoff
+    ][-limit:]
+
+    return json.dumps({"conversions": history, "count": len(history)}, indent=2)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    mcp.run()

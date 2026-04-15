@@ -1,34 +1,97 @@
 name: currency-converter-ai-mcp
-description: MEOK AI Labs MCP Server
+description: Comprehensive currency conversion with rates and analytics.
 version: 1.0.0
 tools:
 - name: convert_currency
   description: Convert amount between currencies
-  parameters: []
+  parameters:
+  - name: amount
+    type: number
+    required: true
+  - name: from_currency
+    type: string
+    required: true
+  - name: to_currency
+    type: string
+    required: true
 - name: batch_convert
   description: Convert amount to multiple currencies
-  parameters: []
+  parameters:
+  - name: amount
+    type: number
+    required: true
+  - name: from_currency
+    type: string
+    required: false
+  - name: to_currencies
+    type: array
+    required: false
 - name: get_rate
   description: Get current exchange rate
-  parameters: []
+  parameters:
+  - name: from_currency
+    type: string
+    required: false
+  - name: to_currency
+    type: string
+    required: false
 - name: get_all_rates
   description: Get all exchange rates from base currency
-  parameters: []
+  parameters:
+  - name: base
+    type: string
+    required: false
 - name: get_historical_rate
   description: Get historical exchange rate
-  parameters: []
+  parameters:
+  - name: from_currency
+    type: string
+    required: false
+  - name: to_currency
+    type: string
+    required: false
+  - name: date
+    type: string
+    required: false
 - name: get_rate_trend
   description: Get rate trend over time
-  parameters: []
+  parameters:
+  - name: from_currency
+    type: string
+    required: false
+  - name: to_currency
+    type: string
+    required: false
+  - name: days
+    type: integer
+    required: false
 - name: add_favorite
   description: Add currency pair to favorites
-  parameters: []
+  parameters:
+  - name: from_currency
+    type: string
+    required: false
+  - name: to_currency
+    type: string
+    required: false
 - name: get_favorites
   description: Get favorite currency pairs
   parameters: []
 - name: set_rate_alert
   description: Set alert for rate target
-  parameters: []
+  parameters:
+  - name: from_currency
+    type: string
+    required: false
+  - name: to_currency
+    type: string
+    required: false
+  - name: target_rate
+    type: number
+    required: false
+  - name: direction
+    type: string
+    required: false
 - name: get_alerts
   description: Get active rate alerts
   parameters: []
@@ -37,4 +100,10 @@ tools:
   parameters: []
 - name: get_conversion_history
   description: Get conversion history
-  parameters: []
+  parameters:
+  - name: days
+    type: integer
+    required: false
+  - name: limit
+    type: integer
+    required: false
