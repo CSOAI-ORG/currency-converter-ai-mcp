@@ -1,5 +1,6 @@
 name: currency-converter-ai-mcp
-description: Comprehensive currency conversion with rates and analytics.
+description: 'Currency Converter Ai MCP server. Tools: convert currency, batch convert,
+  get rate. Built by MEOK AI Labs.'
 version: 1.0.0
 tools:
 - name: convert_currency
