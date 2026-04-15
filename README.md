@@ -1,25 +1,33 @@
-# Currency Converter AI MCP
+# Currency Converter AI MCP Server
 
-Convert currencies using built-in exchange rates and compute cross-rate conversions with historical trend indicators.
+> By [MEOK AI Labs](https://meok.ai) — Comprehensive currency conversion with rates, analytics, and alerts
+
+## Installation
+
+```bash
+pip install currency-converter-ai-mcp
+```
+
+## Usage
+
+```bash
+python server.py
+```
 
 ## Tools
 
-- `convert_currency` — Convert an amount from one currency to another.
-- `list_supported_currencies` — List all supported currency codes.
-- `batch_convert` — Convert one amount into multiple target currencies.
+This server provides comprehensive currency conversion tools including:
 
-## Install
+- Real-time conversion between 20+ currencies (USD, GBP, EUR, JPY, AUD, CAD, CHF, CNY, INR, and more)
+- Conversion history tracking
+- Favourite currency pairs
+- Rate alerts
+- Multi-currency analytics
 
-```bash
-pip install -e .
-```
+## Authentication
 
-## Run
-
-```bash
-python -m currency-converter-ai-mcp.server
-```
+Free tier: 15 calls/day. Upgrade at [meok.ai/pricing](https://meok.ai/pricing) for unlimited access.
 
 ## License
 
-MIT
+MIT — MEOK AI Labs
