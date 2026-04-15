@@ -1,0 +1,85 @@
+{
+  "name": "currency-converter-ai",
+  "description": "Comprehensive currency conversion with rates and analytics.",
+  "version": "1.0.0",
+  "protocol_version": "2025-11-25",
+  "publisher": {
+    "name": "MEOK AI Labs",
+    "url": "https://meok.ai",
+    "email": "nicholas@meok.ai"
+  },
+  "repository": "https://github.com/CSOAI-ORG/currency-converter-ai-mcp",
+  "license": "MIT",
+  "transport": [
+    "stdio",
+    "streamable-http"
+  ],
+  "authentication": {
+    "type": "api-key",
+    "free_tier": true,
+    "free_limit": "15 calls/day"
+  },
+  "tools": [
+    {
+      "name": "convert_currency",
+      "description": "Convert amount between currencies"
+    },
+    {
+      "name": "batch_convert",
+      "description": "Convert amount to multiple currencies"
+    },
+    {
+      "name": "get_rate",
+      "description": "Get current exchange rate"
+    },
+    {
+      "name": "get_all_rates",
+      "description": "Get all exchange rates from base currency"
+    },
+    {
+      "name": "get_historical_rate",
+      "description": "Get historical exchange rate"
+    },
+    {
+      "name": "get_rate_trend",
+      "description": "Get rate trend over time"
+    },
+    {
+      "name": "add_favorite",
+      "description": "Add currency pair to favorites"
+    },
+    {
+      "name": "get_favorites",
+      "description": "Get favorite currency pairs"
+    },
+    {
+      "name": "set_rate_alert",
+      "description": "Set alert for rate target"
+    },
+    {
+      "name": "get_alerts",
+      "description": "Get active rate alerts"
+    },
+    {
+      "name": "get_supported_currencies",
+      "description": "Get list of supported currencies"
+    },
+    {
+      "name": "get_conversion_history",
+      "description": "Get conversion history"
+    }
+  ],
+  "categories": [
+    "AI & Machine Learning",
+    "Data & Analytics"
+  ],
+  "pricing": {
+    "free": {
+      "calls_per_day": 15
+    },
+    "pro": {
+      "price": "$29/month",
+      "url": "https://meok.ai/pricing"
+    }
+  }
+}
