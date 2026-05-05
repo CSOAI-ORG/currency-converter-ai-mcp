@@ -1,33 +1,38 @@
-# Currency Converter AI MCP Server
+<div align="center">
 
-> By [MEOK AI Labs](https://meok.ai) — Comprehensive currency conversion with rates, analytics, and alerts
+[![GitHub stars](https://img.shields.io/github/stars/CSOAI-ORG/currency-converter-ai-mcp)](https://github.com/CSOAI-ORG/currency-converter-ai-mcp/stargazers)
+
+# ucurrencyU converterU aiU mcp
+
+****
+
+[![npm version](https://img.shields.io/npm/v/@meok-ai/currency-converter-ai-mcp)](https://www.npmjs.com/package/@meok-ai/currency-converter-ai-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![MEOK AI Labs](https://img.shields.io/badge/MEOK_AI_Labs-255+_servers-purple)](https://meok.ai)
+
+[Installation](#installation) · [Docs](https://csoai.org) · [Report Bug](https://github.com/CSOAI-ORG/currency-converter-ai-mcp/issues)
+
+</div>
+
+---
 
 ## Installation
 
 ```bash
 pip install currency-converter-ai-mcp
+# or
+npm install -g @meok-ai/currency-converter-ai-mcp
 ```
 
-## Usage
+## Quick Start
 
-```bash
-python server.py
-```
+See the project repository for full documentation and examples.
 
-## Tools
+## Enterprise Support
 
-This server provides comprehensive currency conversion tools including:
-
-- Real-time conversion between 20+ currencies (USD, GBP, EUR, JPY, AUD, CAD, CHF, CNY, INR, and more)
-- Conversion history tracking
-- Favourite currency pairs
-- Rate alerts
-- Multi-currency analytics
-
-## Authentication
-
-Free tier: 15 calls/day. Upgrade at [meok.ai/pricing](https://meok.ai/pricing) for unlimited access.
+- 📧 nicholas@csoai.org
+- 🌐 [CSOAI.org](https://csoai.org)
 
 ## License
 
-MIT — MEOK AI Labs
+MIT © [CSOAI](https://csoai.org)
