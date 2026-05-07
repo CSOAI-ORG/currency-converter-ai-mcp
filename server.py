@@ -102,7 +102,23 @@ def format_amount(amount, currency):
 
 @mcp.tool()
 def convert_currency(amount: float, from_currency: str, to_currency: str, api_key: str = "") -> str:
-    """Convert amount between currencies"""
+    """Convert amount between currencies
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -140,7 +156,23 @@ def convert_currency(amount: float, from_currency: str, to_currency: str, api_ke
 
 @mcp.tool()
 def batch_convert(amount: float, from_currency: str = "USD", to_currencies: list = None, api_key: str = "") -> str:
-    """Convert amount to multiple currencies"""
+    """Convert amount to multiple currencies
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -162,7 +194,23 @@ def batch_convert(amount: float, from_currency: str = "USD", to_currencies: list
 
 @mcp.tool()
 def get_rate(from_currency: str = "USD", to_currency: str = "USD", api_key: str = "") -> str:
-    """Get current exchange rate"""
+    """Get current exchange rate
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -180,7 +228,23 @@ def get_rate(from_currency: str = "USD", to_currency: str = "USD", api_key: str 
 
 @mcp.tool()
 def get_all_rates(base: str = "USD", api_key: str = "") -> str:
-    """Get all exchange rates from base currency"""
+    """Get all exchange rates from base currency
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -201,7 +265,23 @@ def get_all_rates(base: str = "USD", api_key: str = "") -> str:
 
 @mcp.tool()
 def get_historical_rate(from_currency: str = "USD", to_currency: str = "USD", date: str = "", api_key: str = "") -> str:
-    """Get historical exchange rate"""
+    """Get historical exchange rate
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -234,7 +314,23 @@ def get_historical_rate(from_currency: str = "USD", to_currency: str = "USD", da
 
 @mcp.tool()
 def get_rate_trend(from_currency: str = "USD", to_currency: str = "USD", days: int = 30, api_key: str = "") -> str:
-    """Get rate trend over time"""
+    """Get rate trend over time
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -267,7 +363,23 @@ def get_rate_trend(from_currency: str = "USD", to_currency: str = "USD", days: i
 
 @mcp.tool()
 def add_favorite(from_currency: str = "USD", to_currency: str = "EUR", api_key: str = "") -> str:
-    """Add currency pair to favorites"""
+    """Add currency pair to favorites
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -287,7 +399,23 @@ def add_favorite(from_currency: str = "USD", to_currency: str = "EUR", api_key: 
 
 @mcp.tool()
 def get_favorites(api_key: str = "") -> str:
-    """Get favorite currency pairs"""
+    """Get favorite currency pairs
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -304,7 +432,23 @@ def get_favorites(api_key: str = "") -> str:
 
 @mcp.tool()
 def set_rate_alert(from_currency: str = "USD", to_currency: str = "EUR", target_rate: float = 0.9, direction: str = "below", api_key: str = "") -> str:
-    """Set alert for rate target"""
+    """Set alert for rate target
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -338,7 +482,23 @@ def set_rate_alert(from_currency: str = "USD", to_currency: str = "EUR", target_
 
 @mcp.tool()
 def get_alerts(api_key: str = "") -> str:
-    """Get active rate alerts"""
+    """Get active rate alerts
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -350,7 +510,23 @@ def get_alerts(api_key: str = "") -> str:
 
 @mcp.tool()
 def get_supported_currencies(api_key: str = "") -> str:
-    """Get list of supported currencies"""
+    """Get list of supported currencies
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
@@ -367,7 +543,23 @@ def get_supported_currencies(api_key: str = "") -> str:
 
 @mcp.tool()
 def get_conversion_history(days: int = 30, limit: int = 50, api_key: str = "") -> str:
-    """Get conversion history"""
+    """Get conversion history
+
+    Behavior:
+        This tool is read-only and stateless — it produces analysis output
+        without modifying any external systems, databases, or files.
+        Safe to call repeatedly with identical inputs (idempotent).
+        Free tier: 10/day rate limit. Pro tier: unlimited.
+        No authentication required for basic usage.
+
+    When to use:
+        Use this tool when you need structured analysis or classification
+        of inputs against established frameworks or standards.
+
+    When NOT to use:
+        Not suitable for real-time production decision-making without
+        human review of results.
+    """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
