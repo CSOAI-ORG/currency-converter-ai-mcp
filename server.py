@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""MEOK AI Labs — currency-converter-ai-mcp MCP Server. Comprehensive currency conversion with rates and analytics."""
+"""
+MEOK AI Labs — currency-converter-ai-mcp MCP Server. Comprehensive currency conversion with rates and analytics."""
 
 import json
 from datetime import datetime, timedelta, timezone
@@ -8,7 +9,6 @@ import uuid
 import random
 import sys, os
 
-sys.path.insert(0, os.path.expanduser("~/clawd/meok-labs-engine/shared"))
 from auth_middleware import check_access
 from mcp.server.fastmcp import FastMCP
 from collections import defaultdict
@@ -142,7 +142,7 @@ def convert_currency(amount: float, from_currency: str, to_currency: str, api_ke
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     from_curr = from_currency.upper()
@@ -217,7 +217,7 @@ def batch_convert(amount: float, from_currency: str = "USD", to_currencies: list
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     from_curr = from_currency.upper()
@@ -275,7 +275,7 @@ def get_rate(from_currency: str = "USD", to_currency: str = "USD", api_key: str 
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     from_curr = from_currency.upper()
@@ -328,7 +328,7 @@ def get_all_rates(base: str = "USD", api_key: str = "") -> str:
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     base_upper = base.upper()
@@ -386,7 +386,7 @@ def get_historical_rate(from_currency: str = "USD", to_currency: str = "USD", da
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     from_curr = from_currency.upper()
@@ -456,7 +456,7 @@ def get_rate_trend(from_currency: str = "USD", to_currency: str = "USD", days: i
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     from_curr = from_currency.upper()
@@ -525,7 +525,7 @@ def add_favorite(from_currency: str = "USD", to_currency: str = "EUR", api_key: 
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     from_curr = from_currency.upper()
@@ -579,7 +579,7 @@ def get_favorites(api_key: str = "") -> str:
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     results = []
@@ -634,7 +634,7 @@ def set_rate_alert(from_currency: str = "USD", to_currency: str = "EUR", target_
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     from_curr = from_currency.upper()
@@ -702,7 +702,7 @@ def get_alerts(api_key: str = "") -> str:
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     active = [a for a in _store["alerts"] if not a.get("triggered")]
@@ -748,7 +748,7 @@ def get_supported_currencies(api_key: str = "") -> str:
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     currencies = []
@@ -801,7 +801,7 @@ def get_conversion_history(days: int = 30, limit: int = 50, api_key: str = "") -
     """
     allowed, msg, tier = check_access(api_key)
     if not allowed:
-        return json.dumps({"error": msg, "upgrade_url": "https://meok.ai/pricing"})
+        return json.dumps({"error": msg, "upgrade_url": "https://councilof.ai"})
     if err := _rl(): return err
 
     cutoff = datetime.now() - timedelta(days=days)
@@ -814,5 +814,8 @@ def get_conversion_history(days: int = 30, limit: int = 50, api_key: str = "") -
     return json.dumps({"conversions": history, "count": len(history)}, indent=2)
 
 
-if __name__ == "__main__":
+def main():
     mcp.run()
+
+if __name__ == '__main__':
+    main()

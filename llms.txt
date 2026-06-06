@@ -1,0 +1,57 @@
+# currency-converter-ai-mcp
+# **MCP server for currency converter ai mcp operations**
+
+## Install
+```bash
+pip install currency-converter-ai-mcp
+```
+
+## Auth & Rate Limits
+- Free tier: 10 calls/day. No API key required.
+- Pro tier (£79/mo): unlimited + signed attestations.
+- Enterprise (£1,499/mo): white-label.
+
+## Tools
+
+### `convert_currency`
+Convert amount between currencies
+
+### `batch_convert`
+Convert amount to multiple currencies
+
+### `get_rate`
+Get current exchange rate
+
+### `get_all_rates`
+Get all exchange rates from base currency
+
+### `get_historical_rate`
+Get historical exchange rate
+
+### `get_rate_trend`
+Get rate trend over time
+
+### `add_favorite`
+Add currency pair to favorites
+
+### `get_favorites`
+Get favorite currency pairs
+
+### `set_rate_alert`
+Set alert for rate target
+
+### `get_alerts`
+Get active rate alerts
+
+### `get_supported_currencies`
+Get list of supported currencies
+
+### `get_conversion_history`
+Get conversion history
+
+
+## Maintainer
+MEOK AI Labs · hello@meok.ai · https://meok.ai · MIT licensed
+
+## Pairs with
+Governance moat: pair this tool with any of MEOK's 38 governance MCPs (EU AI Act, DORA, NIS2, CRA, GDPR, ISO 42001, etc.) for full compliance coverage.

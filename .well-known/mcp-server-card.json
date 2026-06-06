@@ -1,0 +1,49 @@
+{
+  "name": "currency-converter-ai-mcp",
+  "title": "Currency Converter Ai Mcp",
+  "description": "Currency Converter Ai MCP server. Tools: convert currency, batch convert, get rate. Built by MEOK AI Labs.",
+  "version": "1.0.6",
+  "homepage": "https://meok.ai",
+  "license": "MIT",
+  "transport": {
+    "type": "stdio"
+  },
+  "tools": [
+    {
+      "name": "convert_currency"
+    },
+    {
+      "name": "batch_convert"
+    },
+    {
+      "name": "get_rate"
+    },
+    {
+      "name": "get_all_rates"
+    },
+    {
+      "name": "get_historical_rate"
+    },
+    {
+      "name": "get_rate_trend"
+    },
+    {
+      "name": "add_favorite"
+    },
+    {
+      "name": "get_favorites"
+    },
+    {
+      "name": "set_rate_alert"
+    },
+    {
+      "name": "get_alerts"
+    },
+    {
+      "name": "get_supported_currencies"
+    },
+    {
+      "name": "get_conversion_history"
+    }
+  ]
+}

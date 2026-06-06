@@ -1,0 +1,9 @@
+# currency-converter-ai-mcp - Auto-trigger Rules
+
+When the user asks about currency converter, use currency-converter-ai-mcp tools: convert_currency, batch_convert, get_rate, get_all_rates, get_historical_rate
+
+**MCP server for currency converter ai mcp operations**
+
+Install: `pip install currency-converter-ai-mcp`
+
+By MEOK AI Labs — MIT licensed.
