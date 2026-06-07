@@ -1,0 +1,131 @@
+{
+  "name": "currency-converter-ai-mcp",
+  "description": "Currency Converter Ai MCP Server by MEOK AI Labs",
+  "url": "https://proofof.ai/scorecard/currency-converter-ai-mcp.html",
+  "version": "1.0.6",
+  "protocolVersion": "0.2.0",
+  "provider": {
+    "organization": "MEOK AI Labs",
+    "url": "https://meok.ai"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "defaultInputModes": [
+    "text"
+  ],
+  "defaultOutputModes": [
+    "text"
+  ],
+  "skills": [
+    {
+      "id": "convert_currency",
+      "name": "Convert Currency",
+      "description": "convert_currency via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "batch_convert",
+      "name": "Batch Convert",
+      "description": "batch_convert via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_rate",
+      "name": "Get Rate",
+      "description": "get_rate via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_all_rates",
+      "name": "Get All Rates",
+      "description": "get_all_rates via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_historical_rate",
+      "name": "Get Historical Rate",
+      "description": "get_historical_rate via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_rate_trend",
+      "name": "Get Rate Trend",
+      "description": "get_rate_trend via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "add_favorite",
+      "name": "Add Favorite",
+      "description": "add_favorite via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_favorites",
+      "name": "Get Favorites",
+      "description": "get_favorites via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "set_rate_alert",
+      "name": "Set Rate Alert",
+      "description": "set_rate_alert via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_alerts",
+      "name": "Get Alerts",
+      "description": "get_alerts via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_supported_currencies",
+      "name": "Get Supported Currencies",
+      "description": "get_supported_currencies via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_conversion_history",
+      "name": "Get Conversion History",
+      "description": "get_conversion_history via currency-converter-ai-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    }
+  ]
+}

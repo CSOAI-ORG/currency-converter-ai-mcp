@@ -1,0 +1,30 @@
+{
+  "acpVersion": "0.1",
+  "agent": {
+    "name": "currency-converter-ai-mcp",
+    "description": "Currency Converter Ai MCP Server by MEOK AI Labs",
+    "version": "1.0.6",
+    "provider": "MEOK AI Labs",
+    "interfaces": [
+      {
+        "type": "mcp",
+        "transport": "stdio",
+        "package": "currency-converter-ai-mcp"
+      }
+    ],
+    "capabilities": [
+      "convert_currency",
+      "batch_convert",
+      "get_rate",
+      "get_all_rates",
+      "get_historical_rate",
+      "get_rate_trend",
+      "add_favorite",
+      "get_favorites",
+      "set_rate_alert",
+      "get_alerts",
+      "get_supported_currencies",
+      "get_conversion_history"
+    ]
+  }
+}
