@@ -1,4 +1,4 @@
-<!-- mcp-name: CSOAI-ORG/currency-converter-ai-mcp -->
+<!-- mcp-name: io.github.CSOAI-ORG/currency-converter-ai-mcp -->
 [![MCP Scorecard: 86/100](https://img.shields.io/badge/proofof.ai-86%2F100-5b21b6)](https://proofof.ai/scorecard/currency-converter-ai-mcp.html)
 
 # Currency Converter Ai MCP
